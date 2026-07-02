@@ -1,95 +1,179 @@
-```
 # Sistema de Fila TCP - Atendimento Integrado
 
-Este repositório contém uma implementação robusta de um **Sistema de Gestão de Filas de Atendimento** baseado na arquitetura Cliente-Servidor, utilizando a API de **Sockets (TCP)** do Java. O sistema foi projetado para permitir que alunos solicitem senhas para serviços específicos e que atendentes gerenciem essas filas em tempo real, garantindo a organização e o fluxo eficiente de atendimento em ambientes educacionais.
+Este repositório contém uma implementação robusta de um **Sistema de Gestão de Filas de Atendimento** baseado na arquitetura **Cliente-Servidor**, utilizando a API de **Sockets TCP** do Java.
+
+O sistema foi desenvolvido para permitir que alunos solicitem senhas para diferentes serviços e que atendentes gerenciem essas filas em tempo real, garantindo organização, agilidade e eficiência no processo de atendimento.
+
+---
 
 ## 🎯 Objetivo do Projeto
-O sistema visa automatizar o processo de triagem e atendimento, superando problemas de filas físicas e desorganização, proporcionando:
-- **Escalabilidade:** Suporte a múltiplos clientes (alunos e atendentes) simultâneos via *Multithreading*.
-- **Concorrência Segura:** Uso de estruturas `ConcurrentLinkedQueue` e `AtomicInteger` para evitar inconsistências nos dados de atendimento.
-- **Comunicação em Tempo Real:** Sincronização instantânea entre o estado da fila no servidor e as solicitações dos clientes.
 
-## 🏗️ Arquitetura Técnica
-O projeto é modularizado para garantir a separação de responsabilidades:
+O sistema automatiza o processo de triagem e atendimento, eliminando problemas comuns de filas físicas e desorganização.
 
-### 1. Servidor (`servidor/`)
-- **Centralização:** Gerencia a lógica de negócios e o armazenamento das filas em memória.
-- **Multithreading:** Utiliza a classe `ConexaoCliente` (que estende `Thread`) para processar cada conexão de forma independente.
-- **Persistência em Memória:** Gerencia estados de fila, contagem de senhas e estatísticas de uso.
+### Principais características
 
-### 2. Cliente Aluno (`aluno/`)
-- **Interface Console:** Interface otimizada via terminal.
-- **Funcionalidades:** Listagem dinâmica de serviços, solicitação de senhas e verificação da posição na fila em tempo real através de requisições TCP.
+- ✅ **Escalabilidade:** suporte a múltiplos alunos e atendentes simultaneamente utilizando **Multithreading**.
+- ✅ **Concorrência Segura:** utilização de `ConcurrentLinkedQueue` e `AtomicInteger` para evitar inconsistências nos dados.
+- ✅ **Comunicação em Tempo Real:** sincronização instantânea entre clientes e servidor através de conexões TCP.
 
-### 3. Posto de Atendimento (`atendente/`)
-- **Gestão de Operações:** Ferramenta destinada aos funcionários para controle operacional.
-- **Controle de Fluxo:** Permite "chamar o próximo", "finalizar atendimento", "pausar atendimento" e exibir relatórios estatísticos.
+---
 
-## ⚙️ Tecnologias e Conceitos
-- **Linguagem:** Java (JDK 8 ou superior).
-- **Protocolo de Rede:** TCP/IP via `java.net.Socket` e `ServerSocket`.
-- **Programação Concorrente:** `Thread`, `AtomicInteger`, `ConcurrentLinkedQueue` e `Collections.synchronizedList`.
-- **I/O Streams:** `BufferedReader` e `PrintWriter` para comunicação bidirecional de texto.
+# 🏗️ Arquitetura Técnica
 
-## 🚀 Como Executar
+O projeto foi dividido em módulos para facilitar a manutenção e separar responsabilidades.
 
-### 1. Compilação
-No terminal, dentro da pasta raiz do projeto, execute:
+## 1. Servidor (`servidor/`)
+
+Responsável por toda a lógica do sistema.
+
+### Funcionalidades
+
+- Centraliza o gerenciamento das filas;
+- Processa múltiplas conexões simultaneamente;
+- Mantém as filas e estatísticas em memória.
+
+### Recursos utilizados
+
+- `ServerSocket`
+- `Socket`
+- `Thread`
+- `AtomicInteger`
+- `ConcurrentLinkedQueue`
+
+---
+
+## 2. Cliente Aluno (`aluno/`)
+
+Aplicação executada via terminal.
+
+### Funcionalidades
+
+- Listar serviços disponíveis;
+- Solicitar senha;
+- Consultar posição na fila em tempo real.
+
+---
+
+## 3. Posto de Atendimento (`atendente/`)
+
+Aplicação destinada aos atendentes.
+
+### Funcionalidades
+
+- Chamar próximo aluno;
+- Finalizar atendimento;
+- Pausar atendimento;
+- Exibir estatísticas do sistema.
+
+---
+
+# ⚙️ Tecnologias Utilizadas
+
+- **Java** (JDK 8 ou superior)
+- **TCP/IP**
+- **Sockets (`Socket` e `ServerSocket`)**
+- **Multithreading**
+- **AtomicInteger**
+- **ConcurrentLinkedQueue**
+- **Collections.synchronizedList**
+- **BufferedReader**
+- **PrintWriter**
+
+---
+
+# 🚀 Como Executar
+
+## 1. Compilar o projeto
+
+No terminal, dentro da pasta raiz:
+
 ```bash
 javac servidor/*.java aluno/*.java atendente/*.java
-
 ```
 
-### 2. Iniciando o Servidor
+---
 
-Execute a aplicação servidor para abrir a porta de escuta (padrão: 5000):
+## 2. Iniciar o servidor
 
 ```bash
 java servidor.ServidorApp
-
 ```
 
-### 3. Iniciando os Clientes
+O servidor iniciará a escuta na porta **5000**.
 
-* **Para Alunos:**
+---
+
+## 3. Executar os clientes
+
+### Cliente Aluno
+
 ```bash
 java aluno.AlunoApp
-
 ```
 
+### Cliente Atendente
 
-* **Para Atendentes:**
 ```bash
 java atendente.AtendenteApp
-
 ```
 
+> **Importante:** Inicie sempre o servidor antes dos clientes.
+>
+> Quando solicitado, informe o endereço do servidor:
+>
+> - `localhost` (mesma máquina)
+> - ou o IP da máquina onde o servidor estiver executando.
 
+---
 
-> **Nota:** Certifique-se de que o servidor esteja rodando antes de iniciar qualquer cliente. O sistema solicitará o IP do servidor (digite `localhost` se estiverem na mesma máquina).
-
-## 📂 Estrutura do Repositório
+# 📂 Estrutura do Projeto
 
 ```text
-├── aluno/            # Código-fonte do cliente aluno
-├── atendente/        # Código-fonte do posto de atendimento
-├── servidor/         # Código-fonte do servidor central
-└── README.md         # Documentação técnica detalhada
-
+.
+├── aluno/
+│   └── Cliente do aluno
+│
+├── atendente/
+│   └── Cliente do atendente
+│
+├── servidor/
+│   └── Servidor central
+│
+└── README.md
 ```
 
-## 👨‍💻 Desenvolvedor
+---
+
+# 🧠 Conceitos Aplicados
+
+- Arquitetura Cliente-Servidor
+- Programação Concorrente
+- Comunicação TCP
+- Threads em Java
+- Estruturas concorrentes
+- Sincronização de dados
+- Filas de atendimento
+- Programação em rede
+
+---
+
+# 👨‍💻 Desenvolvedor
 
 **Agostinho Sande (Agosand)**
+
 *Estudante do 4º Ano de Engenharia Informática*
-Universidade Zambeze, Matacuane - Beira, Moçambique 🇲🇿.
 
-* **GitHub:** [github.com/AGOSAND7](https://github.com/AGOSAND7)
+**Universidade Zambeze**
+Matacuane – Beira, Moçambique 🇲🇿
 
-## 📝 Licença
+### GitHub
 
-Este projeto é de código aberto sob a licença MIT. Sinta-se à vontade para utilizar, aprender e contribuir.
+<https://github.com/AGOSAND7>
 
-```
+---
 
-```
+# 📝 Licença
+
+Este projeto é distribuído sob a licença **MIT**.
+
+Sinta-se à vontade para estudar, modificar, utilizar e contribuir com melhorias.
